@@ -1,3 +1,5 @@
+package com.electro_move_solutions;
+
 public class Coordenades {
 
     // constants

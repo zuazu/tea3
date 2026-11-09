@@ -1,3 +1,5 @@
+package com.electro_move_solutions;
+
 public class Vehicle {
 
     // declaració de les constants

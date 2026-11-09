@@ -1,3 +1,5 @@
+package com.electro_move_solutions;
+
 import java.util.Scanner;
 
 public class InputUtils {

@@ -1,3 +1,5 @@
+package com.electro_move_solutions;
+
 public class ElectroMove {
 
     private static final int MAX_V = 8;

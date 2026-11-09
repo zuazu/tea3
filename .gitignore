@@ -1,0 +1,8 @@
+# Ignore the target directory which is used to house all output of the build.
+target/**
+# Ignore generated Java class files.
+*.class
+# Ignore Javadoc folder (and generated documentation folders in general).
+doc/*
+# Ignore .vscode folder, which is used to store workspace-specific settings of Visual Studio Code.
+.vscode/**

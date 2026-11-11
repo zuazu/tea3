@@ -87,7 +87,7 @@ $$c = 2 \cdot \mathrm{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)$$
 
 $$d = R \cdot c$$
 
-*On $R = 6371\text{ km}$, $\Delta\varphi = \varphi_2 - \varphi_1$, i $\Delta\lambda = \lambda_2 - \lambda_1$ en radians.*
+On $R = 6371\,\mathrm{km}$, $\Delta\varphi = \varphi_2 - \varphi_1$, i $\Delta\lambda = \lambda_2 - \lambda_1$ en radians.
 
 ---
 

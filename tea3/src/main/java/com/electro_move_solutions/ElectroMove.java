@@ -1,10 +1,40 @@
 package com.electro_move_solutions;
 
+/**
+ * <p>
+ * Classe principal de l'aplicació <b>ElectroMove</b>. Conté el mètode
+ * d'execució principal (main) que permet realitzar proves interactives per
+ * crear i gestionar instàncies de vehicles elèctrics, punts de càrrega i
+ * coordenades geogràfiques a través de la consola.
+ * </p>
+ * 
+ * @author Santiago Zuazu Martí
+ * @version 3.0
+ */
 public class ElectroMove {
+
+    /**
+     * <p>
+     * Constructor de la classe {@link ElectroMove}. No realitza cap acció
+     * específica, ja que la classe principal només conté el mètode main() per
+     * executar el programa i un parell de mètodes per introduir coordenades o tipus
+     * de connector (així no repetim instruccions).
+     * </p>
+     */
+    public ElectroMove() {
+    }
 
     private static final int MAX_V = 8;
     private static final int MAX_PC = 5;
 
+    /**
+     * Mètode principal del programa. Executa el programa i realitza proves de les
+     * classes {@link PuntCarrega}, {@link Vehicle}, {@link Coordenades} i
+     * {@link InputUtils}.
+     *
+     * @param args els arguments de la línia de comandes (no s'utilitzen en aquest
+     *             programa).
+     */
     public static void main(String[] args) {
 
         // Declaració de les variables

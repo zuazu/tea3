@@ -1,22 +1,39 @@
 /**
- * <p>La mobilitat elèctrica és un àmbit de gran interès al nostre territori, ja que representa una 
- * oportunitat per avançar cap a un model de mobilitat més sostenible, eficient i respectuós amb el
- * medi ambient. L'augment de l'ús de vehicles elèctrics fa necessari continuar desenvolupant i 
- * millorant les infraestructures de càrrega, així com les eines informàtiques 
- * que permeten gestionar-les.</p>
- *
- * <p>Per aquest motiu, hem de continuar incorporant noves funcionalitats i millores al nostre projecte
- * <b>ElectroMove</b>, amb l'objectiu d'ampliar les seves possibilitats i fer que l'aplicació sigui cada 
- * vegada més completa i útil. A partir de la funcionalitat que ja hem desenvolupat, continuarem 
- * evolucionant el programa, afegint noves opcions de gestió i millorant el seu comportament davant 
- * de diferents situacions.</p>
- *
- * <p>En aquesta nova fase, treballarem amb estructures de control que ens permetran prendre decisions 
- * dins del programa, validar les dades introduïdes i adaptar-ne el funcionament segons les 
- * necessitats de cada situació. D'aquesta manera, continuarem construint una aplicació més robusta,
- * flexible i preparada per respondre als reptes de la mobilitat elèctrica al nostre territori.</p>
+ * <p>
+ * La mobilitat elèctrica s'ha convertit en un element important per avançar cap
+ * a un futur més sostenible, reduint l'impacte ambiental dels desplaçaments i
+ * afavorint un ús més eficient dels recursos. L'increment del nombre de
+ * vehicles elèctrics comporta la necessitat de disposar d'una xarxa de punts de
+ * càrrega ben gestionada i d'aplicacions informàtiques que facilitin
+ * l'administració dels vehicles i d'aquestes infraestructures.
+ * </p>
+ * 
+ * <p>
+ * Per aquest motiu, continuarem ampliant el nostre projecte <b>ElectroMove</b>,
+ * incorporant noves funcionalitats que permetin millorar la gestió dels
+ * vehicles elèctrics i dels punts de càrrega. A partir del treball realitzat
+ * anteriorment, desenvoluparem noves opcions per consultar la informació
+ * registrada, donar d'alta vehicles i assignar-los el punt de càrrega més
+ * proper segons la seva ubicació.
+ * </p>
+ * 
+ * <p>
+ * En aquesta nova fase, aprofundirem en l'ús de <b>les estructures de control
+ * iteratives</b>, que ens permeten repetir un conjunt d'instruccions tantes
+ * vegades
+ * com sigui necessari. Mitjançant bucles com <b>for</b>, <b>while</b> i
+ * <b>do-while</b>,
+ * podrem recórrer arrays, cercar elements, calcular distàncies i mantenir actiu
+ * el
+ * menú principal fins que l'usuari decideixi sortir de l'aplicació. També
+ * utilitzarem estructures de selecció per gestionar les diferents opcions del
+ * menú i controlar el comportament del programa segons les dades introduïdes.
+ * D'aquesta manera, continuarem desenvolupant una aplicació més completa,
+ * interactiva i robusta, alhora que consolidem els coneixements de programació
+ * en Java.
+ * </p>
  * 
  * @author Santiago Zuazu Martí
- * @version 2.0
+ * @version 3.0
  */
 package com.electro_move_solutions;

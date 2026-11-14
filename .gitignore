@@ -3,7 +3,7 @@ target/**
 # Ignore generated Java class files.
 *.class
 # Ignore Javadoc folder (and generated documentation folders in general).
-doc/*
+doc/
 # Ignore VS Code workspace file, placed in the root directory of your project folder.
 *.code-workspace
 # Ignore .vscode folder, which is used to store workspace-specific settings of Visual Studio Code.

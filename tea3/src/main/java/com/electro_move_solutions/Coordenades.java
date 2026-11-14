@@ -38,7 +38,7 @@ public class Coordenades {
     private double longitud;
 
     // Constructors
-    // Crea un punt a partir de les coordendes GPS
+    // Crea un punt a partir de les coordenades GPS
     /**
      * Constructor de la classe Coordenades. construïm un objecte de tipus
      * {@link Coordenades} a partir de la latitud i la longitud (sistema de

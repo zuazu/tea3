@@ -1,5 +1,7 @@
 package com.electro_move_solutions;
 
+import java.util.Scanner;
+
 /**
  * <p>
  * Classe principal de l'aplicació <b>ElectroMove</b>. Conté el mètode
@@ -93,5 +95,71 @@ public class ElectroMove {
             }
         } while (opcio != 5);
         InputUtils.close();
+    }
+
+    /**
+     * <p>
+     * Mètode per llegir un número enter des de la consola.
+     * Si l'usuari introdueix un valor que no és un número enter,
+     * es mostrarà un missatge d'error i es tornarà a demanar l'entrada.
+     * </p>
+     *
+     * <p>
+     * El mètode Integer.parseInt() (ni tampoc Double.parseDouble()) no pot llançar
+     * una NullPointerException directament si li passes un valor null.
+     * </p>
+     *
+     * <p>
+     * En lloc d'això, si li passes un argument null, el mètode llançarà una
+     * NumberFormatException.
+     * </p>
+     *
+     * <p>
+     * El primer que fan en rebre el text és comprovar si la cadena és nul·la
+     * (null). Com que no pot llegir cap caràcter d'un objecte null,
+     * llança una excepció de format numèric (NumberFormatException)
+     * per indicar que la cadena no és vàlida per ser convertida.
+     * </p>
+     *
+     * @param scan     el scanner per llegir l'entrada.
+     * @param missatge el missatge a mostrar per demanar l'entrada.
+     * @return el número enter llegit.
+     */
+    private static int llegirEnter(Scanner scan, String missatge) {
+        // El valor enter llegit que es retorna
+        int enter = 0;
+        // Canvia de valor a cert quan l'entrada és correcta
+        boolean correcta = false;
+        do {
+            System.out.print(missatge);
+            String entrada = scan.nextLine().trim();
+            try {
+                /*
+                 * Si la conversió té èxit, retorna directament un valor primitiu de tipus
+                 * numèric enter
+                 */
+                enter = Integer.parseInt(entrada);
+                /*
+                 * Si Integer.parseInt(entrada) falla, salta directament al catch i mai executa
+                 * la línia següent
+                 */
+                correcta = true;
+            } catch (NumberFormatException e) {
+                /*
+                 * El bloc catch captura l'excepció (NumberFormatException) que llança el mètode
+                 * Integer.parseInt() quan la cadena de text no té el format numèric adequat
+                 * (número enter sense lletres o símbols). Això evita que el
+                 * programa es tanqui de sobte per un error no controlat.
+                 */
+                // Mostra un missatge clar per pantalla informant l'usuari de l'equivocació i
+                // demanant-li de nou un número correcte.
+                System.out.println("Entrada errònia: si us plau, introdueix un número enter.");
+                /*
+                 * Com que la variable correcta no es posa a true dins del catch, el bucle
+                 * do-while torna a començar i li torna a demanar l'entrada a l'usuari.
+                 */
+            }
+        } while (!correcta);
+        return enter;
     }
 }

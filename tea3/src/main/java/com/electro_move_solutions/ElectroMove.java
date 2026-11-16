@@ -17,7 +17,7 @@ public class ElectroMove {
      * <p>
      * Constructor de la classe {@link ElectroMove}. No realitza cap acció
      * específica, ja que la classe principal només conté el mètode main() per
-     * executar el programa i un parell de mètodes per introduir coordenades o tipus
+     * executar el programa i algun mètode per introduir coordenades o tipus
      * de connector (així no repetim instruccions).
      * </p>
      */
@@ -38,7 +38,7 @@ public class ElectroMove {
      * classes {@link PuntCarrega}, {@link Vehicle}, {@link Coordenades} i
      * {@link InputUtils}.
      *
-     * @param args els arguments de la línia de comandes (no s'utilitzen en aquest
+     * @param args Els arguments de la línia de comandes (no s'utilitzen en aquest
      *             programa).
      */
     public static void main(String[] args) {
@@ -55,8 +55,11 @@ public class ElectroMove {
          */
         PuntCarrega[] puntsCarrega = new PuntCarrega[MAX_PC];
         /*
+         * Declara i inicialitza un array amb una capacitat definida
+         * per MAX_PC. Emmagatzemarà les distàncies entre un vehicle i els punts de
+         * càrrega disponibles.
          */
-        double distancia[] = new double[MAX_PC];
+        // double distancia[] = new double[MAX_PC];
         /*
          * La opció del menú principal seleccionada.
          */
@@ -103,23 +106,71 @@ public class ElectroMove {
             // Mostrar menú
             menuPrincipal();
             // Llegir opció
-            opcio = InputUtils.llegirOpcio("\n\t\tEscull una opció:", 1, 5);
+            opcio = InputUtils.readInt("\n\t\tEscull una opció: ", 1, 5);
             switch (opcio) {
-                case 1:
-                    InputUtils.imprimirArray(vehicles);
+                case 1: {
+                    imprimirArray(vehicles);
                     break;
-                case 2:
-                    InputUtils.imprimirArray(puntsCarrega);
+                }
+                case 2: {
+                    imprimirArray(puntsCarrega);
                     break;
-                case 3:
-                    // PENDENT: gestionar la càrrega del cotxe (TREBALL EN EQUIP)
+                }
+                case 3: {
+                    System.out.print("\nIntrodueix matrícula vehicle: ");
+                    String matricula = InputUtils.readLine();
+                    Vehicle cotxe = compararMatricula(matricula, vehicles);
+                    // Punt de càrrega proper i lliure
+                    PuntCarrega disponible = null;
+                    if (cotxe == null) {
+                        System.out.println("\nLa matrícula del vehicle no existeix.");
+                    } else if ((disponible = puntCarregaProperLliure(cotxe, puntsCarrega)) == null) {
+                        System.out.println("\nNo hi ha cap punt de càrrega lliure.");
+                    } else {
+                        cotxe.setEstat(3);
+                        disponible.setEstat(2);
+                        System.out.println(
+                                "\nEl vehicle s'està carregant al punt de càrrega " + disponible.getIdentificador()
+                                        + ".");
+                    }
                     break;
-                case 4:
-                    // PENDENT: gestionar l'alta de vehicle
+                }
+                case 4: {
+                    int i = 0;
+                    boolean flag = false;
+                    while (i < vehicles.length && !flag) {
+                        if (vehicles[i] == null) {
+                            flag = true;
+                        } else {
+                            i++;
+                        }
+                    }
+                    if (!flag) {
+                        // L'array vehicles està ple
+                        System.out.println("\nNo es poden registrar més vehicles.");
+                    } else {
+                        // Crear un vehicle
+                        String matricula = InputUtils.readValidLicensePlate();
+                        if ((compararMatricula(matricula, vehicles) == null)) {
+                            System.out.print("Marca: ");
+                            String marca = InputUtils.readLine();
+                            System.out.print("Model: ");
+                            String model = InputUtils.readLine();
+                            int autonomia = InputUtils.readInt("Autonomia (en km): ");
+                            Coordenades ubicacioVehicle = InputUtils.introduirCoordenades();
+                            Vehicle cotxe = new Vehicle(matricula, marca, model, autonomia, ubicacioVehicle);
+                            vehicles[i] = cotxe;
+                            System.out.println("\nEl vehicle ha estat creat.");
+                        } else {
+                            System.out.println("\nAquesta matrícula ja existeix.");
+                        }
+                    }
                     break;
-                case 5:
-                    // PENDENT: gestionar la finalització del programa
+                }
+                case 5: {
+                    System.out.println("\nSortint del programa...");
                     break;
+                }
             }
         } while (opcio != 5);
         InputUtils.close();
@@ -130,10 +181,100 @@ public class ElectroMove {
      */
     private static void menuPrincipal() {
         System.out.println("\n\t\tGESTIÓ MOBILITAT ELÈCTRICA\n\n");
-        System.out.println("1. Mostrar vehicles");
-        System.out.println("2. Mostrar punts de càrrega");
-        System.out.println("3. Posar en càrrega un vehicle");
-        System.out.println("4. Donar d'alta un vehicle");
-        System.out.println("5. Sortir");
+        System.out.println("\t1. Mostrar vehicles");
+        System.out.println("\t2. Mostrar punts de càrrega");
+        System.out.println("\t3. Posar en càrrega un vehicle");
+        System.out.println("\t4. Donar d'alta un vehicle");
+        System.out.println("\t5. Sortir");
+    }
+
+    /**
+     * Imprimir per pantalla els elements no nuls de qualsevol array d'objectes.
+     *
+     * @param array L'array d'objectes que es vol mostrar.
+     */
+    public static void imprimirArray(Object[] array) {
+        System.out.print("\n");
+        for (Object element : array) {
+            if (element != null) { // Evita imprimir les posicions buides (com vehicles[6] i [7])
+                System.out.println(element.toString());
+            }
+        }
+        System.out.print("\n");
+    }
+
+    /**
+     * Comparar si són idèntiques la matrícula introduïda per consola amb les que
+     * consten emmagatzemades dins d'un array de vehicles.
+     * 
+     * @param matricula Una matrícula de vehicle.
+     * @param vehicles  Un array de objectes de la classe {@link Vehicle}.
+     * @return Un objecte Vehicle emmagatzemat dins del array vehicles que té la
+     *         mateixa matrícula que la passada com a paràmetre. En el cas de no
+     *         trobar la mateixa matrícula, retornar un valor null.
+     */
+    public static Vehicle compararMatricula(String matricula, Vehicle[] vehicles) {
+        Vehicle cotxe = null;
+        int posicio = 0;
+        boolean trobada = false;
+        // Si l'array de vehicles o la String matricula són null el mètode retronar null
+        if (vehicles == null || matricula == null) {
+            cotxe = null;
+        } else {
+            // Iterar mentre que qualsevol posició estigui dins dels límits i que no
+            // l'haguem trobat encara.
+            while (posicio < vehicles.length && !trobada) {
+                // Assegurar que la posició del array no estigui lliure i que les matrícules
+                // coincideixin
+                if (vehicles[posicio] != null && vehicles[posicio].getMatricula().equals(matricula)) {
+                    cotxe = vehicles[posicio];
+                    trobada = true;
+                }
+                posicio++;
+            }
+        }
+        return cotxe;
+    }
+
+    /**
+     * Esbrinar si un punt de càrrega està lliure.
+     * 
+     * @param puntCarrega El punt de càrrega del que cal esbrinar si està lliure.
+     * @return Un valor booleà que determina si el punt de càrrega està lliure o no.
+     */
+    public static boolean puntCarregaLliure(PuntCarrega puntCarrega) {
+        boolean lliure = false;
+        if (puntCarrega.getEstat() == 1) {
+            lliure = true;
+        }
+        return lliure;
+    }
+
+    /**
+     * Cercar un punt de càrrega proper i lliure per un vehicle.
+     * 
+     * @param cotxe        El vehicle al qual li volem assignar un punt de càrrega
+     *                     elèctrica proper.
+     * @param puntsCarrega Una sèrie de punts de càrrega elèctrica que poden estar
+     *                     avariats, ocupats o disponibles.
+     * @return El Punt de càrrega disponible més proper a la ubicació del cotxe.
+     */
+    public static PuntCarrega puntCarregaProperLliure(Vehicle cotxe, PuntCarrega puntsCarrega[]) {
+        Coordenades coordenadesCotxe = cotxe.getUbicacio();
+        PuntCarrega puntMesProper = null;
+        double minDistancia = Double.MAX_VALUE; // Inicialitzem amb el valor màxim possible
+        for (int i = 0; i < puntsCarrega.length; i++) {
+            PuntCarrega puntActual = puntsCarrega[i];
+            // Comprovem si el punt està lliure
+            if (puntCarregaLliure(puntActual)) {
+                double distancia = puntActual.getUbicacio().distancia(coordenadesCotxe);
+                // Si trobem una distància menor que la mínima actual, l'actualitzem
+                if (distancia < minDistancia) {
+                    minDistancia = distancia;
+                    puntMesProper = puntActual;
+                }
+            }
+        }
+        return puntMesProper;
     }
 }

@@ -96,7 +96,7 @@ public class PuntCarrega {
     /**
      * Mètode per llegir el identificador del punt de càrrega.
      *
-     * @return String una cadena de text que representa l'identificador del punt de
+     * @return String Una cadena de text que representa l'identificador del punt de
      *         càrrega.
      */
     public String getIdentificador() {
@@ -189,7 +189,7 @@ public class PuntCarrega {
      * Mètode per assignar un nou valor al estat del punt de càrrega. Els valors
      * possibles són DISPONIBLE(1), OCUPAT(2) i AVARIAT(3).
      *
-     * @param estat un enter amb el nou estat del punt de càrrega.
+     * @param estat Un enter amb el nou estat del punt de càrrega.
      */
     public void setEstat(int estat) {
         this.estat = estat;
@@ -217,9 +217,6 @@ public class PuntCarrega {
      * Obtenir una cadena de text amb el nom del connector del punt de càrrega a
      * partir del valor numèric de l'atribut connector.
      * 
-     * @param connector Un valor enter representatiu del tipus de connector del punt
-     *                  de càrrega.
-     * 
      * @return Una cadena de text amb el nom del connector del punt de càrrega.
      */
     public String informacioConnector() {
@@ -244,9 +241,6 @@ public class PuntCarrega {
      * 
      * Obtenir una cadena de text amb el estat del punt de càrrega a
      * partir del valor numèric de l'atribut estat.
-     * 
-     * @param estat Un valor enter representatiu del estat del punt
-     *              de càrrega.
      * 
      * @return Una cadena de text amb el estat del punt de càrrega.
      */

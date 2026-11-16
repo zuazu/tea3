@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * <p>
  * Crea una classe <b>InputUtils</b> que, fent servir la classe
- * {@link java.util.Scanner}, ofereix mètodes per poder llegir dades de
+ * {@link java.util.Scanner}, ofereix mètodes per poder llegir dades des de
  * teclat, introduint el control d’errors.
  * </p>
  * 
@@ -20,23 +20,9 @@ public class InputUtils {
      */
     private static Scanner scan = new Scanner(System.in);
 
-    // Definim quins són els codis d'error
-    /**
-     * Codi d'error de tipus numèric enter.
-     */
-    public static final int ERROR_INT = Integer.MAX_VALUE;
-
-    /**
-     * Codi d'error de tipus numèric de doble precisió.
-     */
-    public static final double ERROR_REAL = Double.MAX_VALUE;
-
     /**
      * <p>
-     * Constructor de la classe {@link InputUtils}. No realitza cap acció
-     * específica, ja que la classe principal només conté el mètode main() per
-     * executar el programa i un parell de mètodes per introduir coordenades o tipus
-     * de connector (així no repetim instruccions).
+     * Constructor de la classe {@link InputUtils}.
      * </p>
      */
     public InputUtils() {
@@ -52,206 +38,388 @@ public class InputUtils {
         return scan.nextLine();
     }
 
-    // Revisa si el llegit és un nombre enter
     /**
-     * Retorna un nombre enter introduït. Si la dada no és del tipus enter,
-     * retorna el codi d'error.
+     * <p>
+     * Mètode per llegir una matrícula de cotxe des de la consola.
+     * Si l'usuari introdueix un valor que no és en el format adient, es mostrarà un
+     * missatge d'error i es tornarà a demanar l'entrada repetidament.
+     * </p>
      * 
-     * @return El nombre enter què s'ha introduït correctament o bé el nombre
-     *         Integer.MIN_VALUE com a senyal d'error en la introducció de dades.
+     * @return Un valor enter introduït amb el format correcte.
      */
-    public static int readInt() {
-        int resultat;
-        if (scan.hasNextInt())
-            resultat = scan.nextInt();
-        else {
-            // Ignorar el valor de l'entrada
-            scan.next();
-            resultat = ERROR_INT;
+    public static String readValidLicensePlate() {
+        String matricula = "";
+        // Expressió regular de una matrícula de vehicle:
+        // 4 dígits (\d{4}) seguits de 3 lletres ([a-zA-Z]{3})
+        String regex = "^\\d{4}[a-zA-Z]{3}$";
+
+        boolean formatCorrecte = false;
+        // Mentre el format que s'introdueixi no sigui correcte es repetirà el bucle
+        while (!formatCorrecte) {
+            System.out.print("Matrícula: ");
+            /*
+             * Llegir una línia de text introduïda per l'usuari (amb
+             * readLine()), eliminar els espais en blanc del principi i del final (amb
+             * .trim()), i guardar el resultat net a la variable de text matricula.
+             */
+            matricula = readLine().trim();
+            // Indica si aquesta cadena coincideix o no amb l'expressió regular donada.
+            // El mètode matches() de la classe String retorna un valor booleà.
+            if (matricula.matches(regex)) {
+                formatCorrecte = true;
+            } else {
+                System.out.println("Entrada errònia: si us plau, introdueix el següent format:");
+                System.out.println("calen exactament 4 dígits seguits de 3 lletres (ex: 1234ABC).");
+            }
         }
-        // Per llegir el <cr>
-        scan.nextLine();
+        // Converteix automàticament tot a majúscules i ho retorna
+        return matricula.toUpperCase();
+    }
+
+    /**
+     * <p>
+     * Obtenir les dades introduïdes per teclat de les coordenades de una ubicació.
+     * A continuació genera una instància de {@link Coordenades}, que és retornada.
+     * </p>
+     * 
+     * <p>
+     * Aquest mètode <b>introduirCoordenades</b> s'ha desenvolupat per evitar
+     * repetir un bloc de línies de codi cada cop que es genera una ubicació en el
+     * mètode <b>main</b> d'aquesta mateixa classe {@link ElectroMove}.
+     * </p>
+     * 
+     * <p>
+     * Per a la lectura de la latitud i la longitud, utilitza els mètodes de
+     * {@link InputUtils} que permeten especificar els valors mínim i màxim. Es
+     * considera que aquestes dades s'introdueixen correctament, de manera que no
+     * cal gestionar els possibles errors de lectura al mètode <b>main()</b>.
+     * </p>
+     * 
+     * @return Un objecte de la classe {@link Coordenades} que a partir de una
+     *         latitud i una longitud defineix una ubicació.
+     */
+    public static Coordenades introduirCoordenades() {
+        System.out.println("Ubicació:");
+        double latitud = InputUtils.readReal("\tLatitud: ", Coordenades.MIN_LAT, Coordenades.MAX_LAT);
+        double longitud = InputUtils.readReal("\tLongitud: ", Coordenades.MIN_LONG, Coordenades.MAX_LONG);
+        Coordenades ubicacio = new Coordenades(latitud, longitud);
+        return ubicacio;
+    }
+
+    // Revisa si el llegit és un nombre enter.
+    /**
+     * 
+     * <p>
+     * Mètode per llegir un número enter des de la consola.
+     * Si l'usuari introdueix un valor que no és un número enter, es mostrarà un
+     * missatge d'error i es tornarà a demanar l'entrada repetidament.
+     * </p>
+     *
+     * 
+     * <p>
+     * El primer que fa <b>Integer.parseInt()</b> en rebre el text és comprovar si
+     * la cadena és nul·la (null). Com que no pot llegir cap caràcter d'un objecte
+     * null, llança una excepció de format numèric (<b>NumberFormatException</b>)
+     * per indicar que la cadena no és vàlida per ser convertida.
+     * </p>
+     * 
+     * <p>
+     * El mètode <b>Integer.parseInt()</b> (ni tampoc <b>Double.parseDouble()</b>)
+     * no pot llançar una <b>NullPointerException</b> directament si li passes un
+     * valor null. En lloc d'això, si li passes un argument null, el mètode llançarà
+     * una <b>NumberFormatException</b>.
+     * </p>
+     * 
+     * @param missatge El missatge que es mostra per demanar l'entrada.
+     * @return Un valor enter introduït correctament.
+     */
+    public static int readInt(String missatge) {
+        // El valor enter llegit que es retorna
+        int resultat = 0;
+        // Canvia de valor a cert quan l'entrada és correcta
+        boolean correcta = false;
+        do {
+            /*
+             * Demanar l'entrada adient d'un valor mitjançant un missatge.
+             */
+            System.out.print(missatge);
+            /*
+             * Llegir una línia de text introduïda per l'usuari (amb
+             * readLine()), eliminar els espais en blanc del principi i del final (amb
+             * .trim()), i guardar el resultat net a la variable de text entrada.
+             */
+            String entrada = readLine().trim();
+            try {
+                /*
+                 * Si la conversió té èxit, retorna directament un valor primitiu de tipus
+                 * numèric enter.
+                 * 
+                 * Si Integer.parseInt(entrada) falla, salta directament al catch i mai executa
+                 * la línia següent
+                 */
+                resultat = Integer.parseInt(entrada);
+                correcta = true;
+            } catch (NumberFormatException e) {
+                /*
+                 * El bloc catch captura immediatament l'excepció (NumberFormatException) que
+                 * llança el mètode Integer.parseInt() quan la cadena de text no té el format
+                 * numèric adequat (número enter sense lletres o símbols). Això evita que el
+                 * programa es tanqui de sobte per un error no controlat.
+                 */
+                // Mostra un missatge clar per pantalla informant a l'usuari de l'equivocació i
+                // demanant-li de nou un número com cal.
+                System.out.println("\nEntrada errònia: si us plau, introdueix un número enter.");
+                /*
+                 * Com que la variable booleana no es passa a true, el bucle
+                 * do-while torna a començar i torna a demanar l'entrada a l'usuari.
+                 */
+            }
+        } while (!correcta);
         return resultat;
     }
 
     // Revisa si el llegit és un nombre enter i està comprès dins d'un rang.
     /**
-     * Retorna un nombre enter introduït. Si la dada introduïda no és del tipus
-     * enter, retorna el codi d’error. Si està fora de rang, és a dir, és menor
-     * que el valor_minim o major que el valor_maxim, també retorna el codi
-     * d’error.
      * 
-     * @param valor_minim Un valor enter que estableix el mínim
-     *                    del rang numèric vàlid.
-     * @param valor_maxim Un valor enter que estableix el màxim
-     *                    del rang numèric vàlid.
-     * 
-     * @return El nombre enter què s'ha introduït correctament o bé el nombre
-     *         Integer.MIN_VALUE com a senyal d'error en la introducció de dades.
-     */
-    public static int readInt(int valorMinim, int valorMaxim) {
-        //
-        int resultat = 0;
-        if (scan.hasNextInt()) {
-            resultat = scan.nextInt();
-            // Verifica que sigui un valor dins del rang
-            if (resultat < valorMinim || resultat > valorMaxim) {
-                // En cas que no estigui dins el rang, retornarà el codi d'error.
-                resultat = ERROR_INT;
-            }
-        } else {
-            scan.next();
-            resultat = ERROR_INT;
-        }
-        scan.nextLine();
-        return resultat;
-    }
-
-    /**
-     * Retorna un nombre de doble precisió introduït. Si la dada no és del tipus
-     * doble precisió, retorna el codi d'error.
-     * 
-     * @return El nombre de doble precisió què s'ha introduït correctament o bé el
-     *         nombre Double.MAX_VALUE com a senyal d'error en la introducció de
-     *         dades.
-     */
-    public static double readReal() {
-        double resultat;
-        if (scan.hasNextDouble())
-            resultat = scan.nextDouble();
-        else {
-            // Ignorar el valor de l'entrada
-            scan.next();
-            resultat = ERROR_REAL;
-        }
-        scan.nextLine();
-        return resultat;
-    }
-
-    /**
-     * Retorna un nombre de doble precisió introduït. Si la dada no és del tipus
-     * doble precisió, retorna el codi d'error. Si està fora de rang, és a dir, és
-     * menor que el valor_minim o major que el valor_maxim, també retorna el codi
-     * d’error.
-     * 
-     * @param valor_minim Un valor de doble precisió que estableix el mínim
-     *                    del rang numèric vàlid.
-     * @param valor_maxim Un valor de doble precisió que estableix el màxim
-     *                    del rang numèric vàlid.
-     * 
-     * @return El nombre de doble precisió què s'ha introduït correctament o bé el
-     *         nombre Double.MAX_VALUE com a senyal d'error en la introducció de
-     *         dades.
-     */
-    public static double readReal(double valorMinim, double valorMaxim) {
-        //
-        double resultat = 0.0;
-        if (scan.hasNextDouble()) {
-            resultat = scan.nextDouble();
-            // Verifica que sigui un valor dins del rang
-            if (resultat < valorMinim || resultat > valorMaxim) {
-                // En cas que no estigui dins el rang, retornarà el valor negatiu més petit
-                resultat = ERROR_REAL;
-            }
-            //
-        } else {
-            /*
-             * Qualsevol valor que no sigui un enter pur
-             * (tant si són lletres, paraules o números amb decimals)
-             * serà capturat i descartat pel bloc else.
-             */
-            scan.next();
-            resultat = ERROR_REAL;
-        }
-        // Per netejar el carriage return <cr> pendent
-        scan.nextLine();
-        return resultat;
-    }
-
-    /**
      * <p>
      * Mètode per llegir un número enter des de la consola.
-     * Si l'usuari introdueix un valor que no és un número enter,
-     * es mostrarà un missatge d'error i es tornarà a demanar l'entrada.
+     * Si l'usuari introdueix un valor que no és un número enter, o bé no està dins
+     * del rang de valors, es mostrarà un missatge d'error i es tornarà a demanar
+     * l'entrada repetidament.
      * </p>
      *
+     * 
      * <p>
-     * El mètode Integer.parseInt() (ni tampoc Double.parseDouble()) no pot llançar
-     * una NullPointerException directament si li passes un valor null.
-     * </p>
-     *
-     * <p>
-     * En lloc d'això, si li passes un argument null, el mètode llançarà una
-     * NumberFormatException.
-     * </p>
-     *
-     * <p>
-     * El primer que fan en rebre el text és comprovar si la cadena és nul·la
-     * (null). Com que no pot llegir cap caràcter d'un objecte null,
-     * llança una excepció de format numèric (NumberFormatException)
+     * El primer que fa <b>Integer.parseInt()</b> en rebre el text és comprovar si
+     * la cadena és nul·la (null). Com que no pot llegir cap caràcter d'un objecte
+     * null, llança una excepció de format numèric (<b>NumberFormatException</b>)
      * per indicar que la cadena no és vàlida per ser convertida.
      * </p>
+     * 
+     * <p>
+     * El mètode <b>Integer.parseInt()</b> (ni tampoc <b>Double.parseDouble()</b>)
+     * no pot llançar una <b>NullPointerException</b> directament si li passes un
+     * valor null. En lloc d'això, si li passes un argument null, el mètode llançarà
+     * una <b>NumberFormatException</b>.
+     * </p>
      *
-     * @param missatge   El missatge a mostrar per demanar l'entrada.
-     * @param valorMinim El valor numèric mínim acceptat.
-     * @param valorMaxim El valor numèric màxim acceptat.
-     * @return El número enter llegit.
+     * 
+     * @param missatge    El missatge que es mostra per demanar l'entrada.
+     * @param valorMinim Un valor que estableix el mínim
+     *                    del rang numèric vàlid.
+     * @param valorMaxim Un valor que estableix el màxim
+     *                    del rang numèric vàlid.
+     * @return Un valor enter introduït correctament.
      */
-    public static int llegirOpcio(String missatge, int valorMinim, int valorMaxim) {
+    public static int readInt(String missatge, int valorMinim, int valorMaxim) {
         // El valor enter llegit que es retorna
-        int numeroEnter = 0;
+        int resultat = 0;
         // Canvia de valor a cert quan l'entrada és correcta
         boolean correcta = false;
         do {
+            /*
+             * Demanar l'entrada adient d'un valor mitjançant un missatge.
+             */
             System.out.print(missatge);
-            String entrada = scan.nextLine().trim();
+            /*
+             * Llegir una línia de text introduïda per l'usuari (amb
+             * readLine()), eliminar els espais en blanc del principi i del final (amb
+             * .trim()), i guardar el resultat net a la variable de text entrada.
+             */
+            String entrada = readLine().trim();
             try {
                 /*
                  * Si la conversió té èxit, retorna directament un valor primitiu de tipus
-                 * numèric enter
-                 */
-                numeroEnter = Integer.parseInt(entrada);
-                /*
+                 * numèric enter.
+                 * 
                  * Si Integer.parseInt(entrada) falla, salta directament al catch i mai executa
                  * la línia següent
                  */
-                if (numeroEnter <= valorMaxim && numeroEnter >= valorMinim) {
+                resultat = Integer.parseInt(entrada);
+                // Verifica que sigui un valor dins del rang passat com arguments al mètode
+                if (resultat <= valorMaxim && resultat >= valorMinim) {
                     correcta = true;
                 } else {
-                    System.out.println("\nEntrada errònia: si us plau, introdueix un valor entre el 1 i el 5.");
+                    System.out.println("\nEntrada errònia: si us plau, introdueix un valor entre el " + valorMinim
+                            + " i el " + valorMaxim + ".");
                 }
             } catch (NumberFormatException e) {
                 /*
-                 * El bloc catch captura l'excepció (NumberFormatException) que llança el mètode
-                 * Integer.parseInt() quan la cadena de text no té el format numèric adequat
-                 * (número enter sense lletres o símbols). Això evita que el
+                 * El bloc catch captura immediatament l'excepció (NumberFormatException) que
+                 * llança el mètode Integer.parseInt() quan la cadena de text no té el format
+                 * numèric adequat (número enter sense lletres o símbols). Això evita que el
                  * programa es tanqui de sobte per un error no controlat.
                  */
-                // Mostra un missatge clar per pantalla informant l'usuari de l'equivocació i
-                // demanant-li de nou un número correcte.
+                // Mostra un missatge clar per pantalla informant a l'usuari de l'equivocació i
+                // demanant-li de nou un número com cal.
                 System.out.println("\nEntrada errònia: si us plau, introdueix un número enter.");
                 /*
-                 * Com que la variable correcta no es pasa a true dins del catch, el bucle
-                 * do-while torna a començar i li torna a demanar l'entrada a l'usuari.
+                 * Com que la variable booleana no es passa a true, el bucle
+                 * do-while torna a començar i torna a demanar l'entrada a l'usuari.
                  */
             }
         } while (!correcta);
-        return numeroEnter;
+        return resultat;
     }
 
+    // Revisa si el llegit és un nombre real de doble precisió
     /**
-     * Imprimir per pantalla els elements no nuls de qualsevol array d'objectes.
+     * 
+     * <p>
+     * Mètode per llegir un nombre real de doble precisió des de la consola.
+     * Si l'usuari introdueix un valor que no és un nombre real, es mostrarà un
+     * missatge d'error i es tornarà a demanar l'entrada repetidament.
+     * </p>
      *
-     * @param array L'array d'objectes que es vol mostrar.
+     * 
+     * <p>
+     * El primer que fa <b>Double.parseDouble()</b> en rebre el text és comprovar si
+     * la cadena és nul·la (null). Com que no pot llegir cap caràcter d'un objecte
+     * null, llança una excepció de format numèric (<b>NumberFormatException</b>)
+     * per indicar que la cadena no és vàlida per ser convertida.
+     * </p>
+     * 
+     * <p>
+     * El mètode <b>Double.parseDouble()</b> (ni tampoc <b>Integer.parseInt()</b>)
+     * no pot llançar una <b>NullPointerException</b> directament si li passes un
+     * valor null. En lloc d'això, si li passes un argument null, el mètode llançarà
+     * una <b>NumberFormatException</b>.
+     * </p>
+     *
+     * 
+     * @param missatge El missatge que es mostra per demanar l'entrada.
+     * @return Un nombre real de doble precisió introduït correctament.
      */
-    public static void imprimirArray(Object[] array) {
-        System.out.print("\n");
-        for (Object element : array) {
-            if (element != null) { // Evita imprimir les posicions buides (com vehicles[6] i [7])
-                System.out.println(element.toString());
+    public static double readReal(String missatge) {
+        // El nombre real de doble precisió llegit que es retorna
+        double resultat = 0;
+        // Canvia de valor a cert quan l'entrada és correcta
+        boolean correcta = false;
+        do {
+            /*
+             * Demanar l'entrada adient d'un valor mitjançant un missatge.
+             */
+            System.out.print(missatge);
+            /*
+             * Llegir una línia de text introduïda per l'usuari (amb
+             * readLine()), eliminar els espais en blanc del principi i del final (amb
+             * .trim()), i guardar el resultat net a la variable de text entrada.
+             */
+            String entrada = readLine().trim();
+            try {
+                /*
+                 * Si la conversió té èxit, retorna directament un valor primitiu de tipus
+                 * nombre real de doble precisió.
+                 * 
+                 * Si Double.parseDouble(entrada) falla, salta directament al catch i mai
+                 * executa la línia següent.
+                 */
+                resultat = Double.parseDouble(entrada);
+                correcta = true;
+            } catch (NumberFormatException e) {
+                /*
+                 * El bloc catch captura immediatament l'excepció (NumberFormatException) que
+                 * llança el mètode Double.parseDouble() quan la cadena de text no té el format
+                 * numèric adequat (nombre real sense lletres o símbols). Això evita que el
+                 * programa es tanqui de sobte per un error no controlat.
+                 */
+                // Mostra un missatge clar per pantalla informant a l'usuari de l'equivocació i
+                // demanant-li de nou un número com cal.
+                System.out.println("\nEntrada errònia: si us plau, introdueix un nombre real de doble precisió.");
+                /*
+                 * Com que la variable booleana no es passa a true, el bucle
+                 * do-while torna a començar i torna a demanar l'entrada a l'usuari.
+                 */
             }
-        }
-        System.out.print("\n");
+        } while (!correcta);
+        return resultat;
+    }
+
+    // Revisa si el llegit és un nombre real de doble precisió i està comprès dins
+    // d'un rang.
+    /**
+     * 
+     * <p>
+     * Mètode per llegir un nombre real de doble precisió des de la consola.
+     * Si l'usuari introdueix un valor que no és un nombre real, o
+     * bé no està dins del rang de valors, es mostrarà un missatge d'error i es
+     * tornarà a demanar l'entrada repetidament.
+     * </p>
+     *
+     * 
+     * <p>
+     * El primer que fa <b>Double.parseDouble()</b> en rebre el text és comprovar si
+     * la cadena és nul·la (null). Com que no pot llegir cap caràcter d'un objecte
+     * null, llança una excepció de format numèric (<b>NumberFormatException</b>)
+     * per indicar que la cadena no és vàlida per ser convertida.
+     * </p>
+     * 
+     * <p>
+     * El mètode <b>Double.parseDouble()</b> (ni tampoc <b>Integer.parseInt()</b>)
+     * no pot llançar una <b>NullPointerException</b> directament si li passes un
+     * valor null. En lloc d'això, si li passes un argument null, el mètode llançarà
+     * una <b>NumberFormatException</b>.
+     * </p>
+     *
+     * 
+     * @param missatge    El missatge que es mostra per demanar l'entrada.
+     * @param valorMinim Un valor que estableix el mínim
+     *                    del rang numèric vàlid.
+     * @param valorMaxim Un valor que estableix el màxim
+     *                    del rang numèric vàlid.
+     * @return Un nombre real de doble precisió introduït correctament.
+     */
+    public static double readReal(String missatge, double valorMinim, double valorMaxim) {
+        // El nombre real de doble precisió llegit que es retorna
+        double resultat = 0;
+        // Canvia de valor a cert quan l'entrada és correcta
+        boolean correcta = false;
+        do {
+            /*
+             * Demanar l'entrada adient d'un valor mitjançant un missatge.
+             */
+            System.out.print(missatge);
+            /*
+             * Llegir una línia de text introduïda per l'usuari (amb
+             * readLine()), eliminar els espais en blanc del principi i del final (amb
+             * .trim()), i guardar el resultat net a la variable de text entrada.
+             */
+            String entrada = readLine().trim();
+            try {
+                /*
+                 * Si la conversió té èxit, retorna directament un valor primitiu de tipus
+                 * nombre real de doble precisió.
+                 * 
+                 * Si Double.parseDouble(entrada) falla, salta directament al catch i mai
+                 * executa la línia següent.
+                 */
+                resultat = Double.parseDouble(entrada);
+                // Verifica que sigui un valor dins del rang passat com arguments al mètode
+                if (resultat <= valorMaxim && resultat >= valorMinim) {
+                    correcta = true;
+                } else {
+                    System.out.println("\nEntrada errònia: "
+                            + "si us plau, introdueix un nombre real de doble precisió entre el "
+                            + valorMinim
+                            + " i el " + valorMaxim + ".");
+                }
+            } catch (NumberFormatException e) {
+                /*
+                 * El bloc catch captura immediatament l'excepció (NumberFormatException) que
+                 * llança el mètode Double.parseDouble() quan la cadena de text no té el format
+                 * numèric adequat (nombre real sense lletres o símbols). Això evita que el
+                 * programa es tanqui de sobte per un error no controlat.
+                 */
+                // Mostra un missatge clar per pantalla informant a l'usuari de l'equivocació i
+                // demanant-li de nou un número com cal.
+                System.out.println("\nEntrada errònia: si us plau, introdueix un nombre real de doble precisió.");
+                /*
+                 * Com que la variable booleana no es passa a true, el bucle
+                 * do-while torna a començar i torna a demanar l'entrada a l'usuari.
+                 */
+            }
+        } while (!correcta);
+        return resultat;
     }
 
     // Cal definir un mètode per tancar l'Scanner

@@ -75,7 +75,7 @@ public class Coordenades {
     /**
      * Mètode per assignar un nou valor a la latitud.
      *
-     * @param latitud un valor numèric de tipus doble precisió que representa la
+     * @param latitud Un valor numèric de tipus doble precisió que representa la
      *                latitud.
      */
     public void setLatitud(double latitud) {
@@ -85,7 +85,7 @@ public class Coordenades {
     /**
      * Mètode per assignar un nou valor a la longitud.
      *
-     * @param longitud un valor numèric de tipus doble precisió que representa la
+     * @param longitud Un valor numèric de tipus doble precisió que representa la
      *                 longitud.
      */
     public void setLongitud(double longitud) {
@@ -97,8 +97,8 @@ public class Coordenades {
     /**
      * Retornar la distància entre dues coordenades en quilòmetres.
      *
-     * @param c2 un objecte de tipus Coordenades amb les coordenades del segon punt.
-     * @return double un valor numèric de tipus doble precisió amb la distància
+     * @param c2 Un objecte de tipus Coordenades amb les coordenades del segon punt.
+     * @return double Un valor numèric de tipus doble precisió amb la distància
      *         entre les dues coordenades en quilòmetres.
      */
     public double distancia(Coordenades c2) {
@@ -139,7 +139,7 @@ public class Coordenades {
      * {@link java.lang.Object}.
      * </p>
      *
-     * @return String una cadena de text amb la representació de les coordenades.
+     * @return String Una cadena de text amb la representació de les coordenades.
      */
     public String toString() {
         return "{" + this.latitud + ", " + this.longitud + "}";

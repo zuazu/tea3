@@ -73,6 +73,9 @@ public class Vehicle {
         this.marca = marca;
         this.model = model;
         this.percentatge = 100;
+        if (autonomia <= 0) {
+            throw new IllegalArgumentException(" L'autonomia ha de ser superior a zero");
+        }
         this.autonomia = autonomia;
         this.estat = ATURAT;
         this.ubicacio = ubicacio;

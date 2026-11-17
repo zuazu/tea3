@@ -124,13 +124,17 @@ public class ElectroMove {
                     PuntCarrega disponible = null;
                     if (cotxe == null) {
                         System.out.println("\nLa matrícula del vehicle no existeix.");
+                    } else if (cotxe.getEstat() == 3) {
+                        System.out.println("\nEl vehicle " + cotxe.getMatricula()
+                                + " ja s'està carregant.");
                     } else if ((disponible = puntCarregaProperLliure(cotxe, puntsCarrega)) == null) {
                         System.out.println("\nNo hi ha cap punt de càrrega lliure.");
                     } else {
                         cotxe.setEstat(3);
                         disponible.setEstat(2);
                         System.out.println(
-                                "\nEl vehicle s'està carregant al punt de càrrega " + disponible.getIdentificador()
+                                "\nEl vehicle s'està carregant al punt de càrrega "
+                                        + disponible.getIdentificador()
                                         + ".");
                     }
                     break;
@@ -174,6 +178,7 @@ public class ElectroMove {
             }
         } while (opcio != 5);
         InputUtils.close();
+
     }
 
     /**

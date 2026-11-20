@@ -110,6 +110,6 @@ On $R = 6371\,\mathrm{km}$, $\Delta\varphi = \varphi_2 - \varphi_1$, i $\Delta\l
 - [x] Disseny de les classes base (`Coordenades`, `Vehicle`, `PuntCarrega`).
 - [x] Mètodes de càlcul de distància GPS.
 - [x] Utilitats de lectura de consola segura (`InputUtils`).
-- [ ] Implementació visual del menú interactiu a `ElectroMove.java`.
-- [ ] Llistat i filtre de vehicles/punts de càrrega.
-- [ ] Mòdul de gestió de càrrega i noves altes.
+- [x] Implementació visual del menú interactiu a `ElectroMove.java`.
+- [x] Llistat i filtre de vehicles/punts de càrrega.
+- [x] Mòdul de gestió de càrrega i noves altes.

@@ -73,6 +73,7 @@ public class Vehicle {
         this.marca = marca;
         this.model = model;
         this.percentatge = 100;
+        // assert autonomia > 0 : "Autonomia incorrecta";
         if (autonomia <= 0) {
             throw new IllegalArgumentException(" L'autonomia ha de ser superior a zero");
         }
